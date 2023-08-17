@@ -138,10 +138,6 @@
         <div class="chat-container">
             <img src="images/my-logo.png" alt="My Logo" class="logo">
             <div class="messages" id="messages">
-                <div class="message user-message">
-                    <img src="images/user-avatar.png" alt="User" class="avatar user-avatar">
-                    User
-                </div>
                 <div class="message bot-message">
                     <img src="images/bot-avatar.png" alt="Bot" class="avatar bot-avatar">
                     Welcome to FlavourQuestAI! How can I assist you today?
@@ -167,32 +163,57 @@
         function appendMessage(content, type) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', type + '-message');
-
+        
             const avatarImage = document.createElement('img');
             avatarImage.src = type === 'user' ? 'images/user-avatar.png' : 'images/bot-avatar.png';
             avatarImage.alt = type.charAt(0).toUpperCase() + type.slice(1);
             avatarImage.classList.add('avatar', type + '-avatar');
-
+        
             const textNode = document.createTextNode(content);
-
+        
             messageElement.appendChild(avatarImage);
             messageElement.appendChild(textNode);
-
+        
             messagesContainer.appendChild(messageElement);
-
+        
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        userInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && userInput.value.trim()) {
-                appendMessage(userInput.value.trim(), 'user');
-                userInput.value = '';
+        function sendMessageToAPI(message) {
+            // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
+            const apiEndpoint = 'http://96bb-34-141-224-43.ngrok.io/chat';
 
-                setTimeout(function() {
-                    appendMessage('Bot response here', 'bot');
-                }, 1000);
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                },
+                body: JSON.stringify({ message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botResponse = data.response; // Modify this based on your API response structure
+                appendMessage(botResponse, 'bot');
+            })
+            .catch(error => {
+                console.error('Error sending message to API:', error);
+            });
+        }
+
+        function handleUserInput(event) {
+            if (event.key === 'Enter') {
+                const userMessage = userInput.value.trim();
+                if (userMessage !== '') {
+                    appendMessage(userMessage, 'user');
+                    userInput.value = '';
+
+                    sendMessageToAPI(userMessage);
+                }
             }
-        });
+        }
+
+        userInput.addEventListener('keydown', handleUserInput);
+       
     </script>
 </body>
 

@@ -23,7 +23,7 @@ function appendMessage(content, type) {
 function sendMessageToAPI(message) {
     // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
     const apiEndpoint = 'http://e805-35-197-67-4.ngrok.io/chat';
-
+    http://e805-35-197-67-4.ngrok.io
     fetch(apiEndpoint, {
         method: 'POST',
         headers: {

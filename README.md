@@ -1,4 +1,4 @@
-# restaurant_chatbot
+# Restaurant_chatbot
 A LLaMa based chatbot on yelp dataset for restaurant recommendation
 
 # We have tried the following methods 
